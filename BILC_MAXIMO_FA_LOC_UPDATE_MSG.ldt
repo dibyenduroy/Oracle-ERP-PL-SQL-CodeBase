@@ -1,0 +1,56 @@
+# $Header$
+
+# dbdrv: exec fnd bin FNDLOAD bin &phase=daa+52 checkfile:~PROD:~PATH:~FILE &ui_apps 0 Y UPLOAD @FND:patch/115/import/afmdmsg.lct @~PROD:~PATH/~FILE
+LANGUAGE = "US"
+LDRCONFIG = "afmdmsg.lct 115.29"
+
+#Source Database infrtrng
+
+#RELEASE_NAME 11.5.10.2
+
+# -- Begin Entity Definitions -- 
+
+DEFINE FND_NEW_MESSAGES
+  KEY   APPLICATION_SHORT_NAME          VARCHAR2(50)
+  KEY   MESSAGE_NAME                    VARCHAR2(30)
+  CTX   OWNER                           VARCHAR2(4000)
+  BASE  LAST_UPDATE_DATE                VARCHAR2(10)
+  CTX   MESSAGE_NUMBER                  VARCHAR2(50)
+  TRANS MESSAGE_TEXT                    VARCHAR2(2000)
+  CTX   DESCRIPTION                     VARCHAR2(240)
+  CTX   TYPE                            VARCHAR2(30)
+  CTX   MAX_LENGTH                      VARCHAR2(50)
+  CTX   CATEGORY                        VARCHAR2(10)
+  CTX   SEVERITY                        VARCHAR2(10)
+  CTX   FND_LOG_SEVERITY                VARCHAR2(50)
+END FND_NEW_MESSAGES
+
+# -- End Entity Definitions -- 
+
+
+BEGIN FND_NEW_MESSAGES "BTVL" "BILC_MAXIMO_FA_LOC_UPDATE_MSG"
+  OWNER = "ORACLE"
+  LAST_UPDATE_DATE = "2009/07/14"
+  MESSAGE_NUMBER = "*NULL*"
+  MESSAGE_TEXT =
+ "SELECT fa.asset_number,fat.description,fl.concatenated_segments Location,fbc.org_id\n\
+  FROM fa_distribution_history fdh,\n\
+       fa_additions_b fa,\n\
+       fa_locations_kfv fl,\n\
+       fa_additions_tl fat,\n\
+       fa_book_controls fbc\n\
+WHERE 1 = 1\n\
+  AND fdh.asset_id = fa.asset_id\n\
+  AND fl.location_id = fdh.location_id\n\
+  AND fdh.date_ineffective IS NULL\n\
+  AND fdh.transaction_header_id_out IS NULL\n\
+  AND fat.asset_id = fa.asset_id\n\
+  AND fbc.book_type_code = fdh.book_type_code"
+  DESCRIPTION = "*NULL*"
+  TYPE = "30_PCT_EXPANSION_PROMPT"
+  MAX_LENGTH = "*NULL*"
+  CATEGORY = "*NULL*"
+  SEVERITY = "*NULL*"
+  FND_LOG_SEVERITY = "*NULL*"
+END FND_NEW_MESSAGES
+
